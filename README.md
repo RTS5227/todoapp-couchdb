@@ -18,4 +18,4 @@ sudo service couchdb restart
 
 6: Tạo CSDL "tododb"
 
-7: Truy cập http://localhost:5984/_www/ 
+7: Truy cập http://localhost:5984/_www/
