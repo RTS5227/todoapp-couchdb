@@ -2,7 +2,7 @@ Cấu hình
 
 1: Tạo một thư mục chứa các static files, ví dụ /home/`<user>`/www
 - cd /home/`<user>`/www
-- git clone git@github.com:ltlam93/todoapp-couchdb.git
+- git clone `git@github.com:ltlam93/todoapp-couchdb.git`
 
 2: Truy cập http://localhost:5984/_utils/config.html
 
