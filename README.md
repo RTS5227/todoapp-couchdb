@@ -2,7 +2,7 @@ Cấu hình
 
 1: Tạo một thư mục chứa các static files, ví dụ /home/`<user>`/www
 - cd /home/`<user>`/www
-- git clone https://github.com/ltlam93/chatapp-couchdb.git
+- git clone git@github.com:ltlam93/todoapp-couchdb.git
 
 2: Truy cập http://localhost:5984/_utils/config.html
 
@@ -16,6 +16,6 @@ Cấu hình
 5: Restart Couchdb
 sudo service couchdb restart
 
-6: Tạo CSDL "chatdb"
+6: Tạo CSDL "tododb"
 
 7: Truy cập http://localhost:5984/_www/ 

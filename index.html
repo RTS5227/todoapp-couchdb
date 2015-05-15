@@ -44,7 +44,7 @@
 
     todo.controller('TodoCtrl', function ($scope, cornercouch) {
         $scope.server = cornercouch('http://localhost:5984', 'GET');
-        var todos = $scope.todos = $scope.server.getDB('db');
+        var todos = $scope.todos = $scope.server.getDB('tododb');
 
         $scope.todoEdited = null;
         todos.queryAll({
