@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple TodoApp</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://todomvc.com/architecture-examples/angularjs/bower_components/todomvc-common/base.css">
+</head>
+<body ng-app="todo">
+<section id="todoapp" ng-controller="TodoCtrl">
+    <header id="header">
+        <h1>todo</h1>
+        <form ng-submit="addNewTodo(name)">
+            <input type="text"
+                   ng-model="name"
+                   id="new-todo"
+                   placeholder="What need to be done?"
+                   autofocus/>
+        </form>
+    </header>
+    <section id="main">
+        <ul id="todo-list">
+            <li ng-repeat="todo in todos.rows | filter:{doc.name:'!!'} | filter:name"
+                ng-init="todo=todo.doc"
+                ng-class="{editing:todo==todoEdited}">
+                <div class="view">
+                    <label ng-bind="todo.name" ng-dblclick="editTodo(todo,$index)"></label>
+                    <button class="destroy" ng-click="removeTodo($index)"></button>
+                </div>
+                <form ng-submit="doneEditing()">
+                    <input ng-model="tmpTodo.name"
+                           ng-blur="doneEditing()"
+                           ng-focus="todo==todoEdited"
+                           class="edit">
+                </form>
+            </li>
+        </ul>
+    </section>
+    <div class="alert alert-error" ng-show="errordata">{{ errordata | json }}</div>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+<script src="src/angular-cornercouch.js"></script>
+<script>
+    var todo = angular.module('todo', ['CornerCouch']);
+
+    todo.controller('TodoCtrl', function ($scope, cornercouch) {
+        $scope.server = cornercouch('http://localhost:5984', 'GET');
+        var todos = $scope.todos = $scope.server.getDB('db');
+
+        $scope.todoEdited = null;
+        todos.queryAll({
+            include_docs: true
+        });
+
+        $scope.addNewTodo = function (name) {
+            if (name) {
+                todos.newDoc({
+                    name:name,
+                    type:'todo'
+                })
+                .save()
+                .success(function(){
+                            delete $scope.name
+                            todos.queryAll({
+                                include_docs: true
+                            })
+                        })
+                .error(setError);
+            }
+        }
+
+        $scope.removeTodo = function (index) {
+            todos.getQueryDoc(index).remove().success(function () {
+                todos.queryRefresh();
+            });
+        }
+
+        $scope.editTodo = function (todo, index) {
+            $scope.todoEdited = todo;
+            $scope.tmpTodo = todos.getQueryDoc(index);
+        }
+
+        $scope.doneEditing = function () {
+            if($scope.tmpTodo.name){
+                $scope.tmpTodo.save().success(function () {
+                    $scope.todoEdited = null;
+                    $scope.tmpTodo = null;
+                    todos.queryRefresh();
+                });
+            }
+        }
+
+        function setError(data, status) {
+            $scope.errorData = {
+                data: data,
+                status: status
+            }
+        }
+    });
+</script>
+</body>
+</html>
