@@ -1,4 +1,4 @@
-Cấu hình
+#Cấu hình
 
 1: Tạo một thư mục chứa các static files, ví dụ /home/`<user>`/www
 - cd /home/`<user>`/www
@@ -14,7 +14,7 @@ Cấu hình
 - value: {couch_httpd_misc_handlers, handle_utils_dir_req, "/home/`<user>`/www"}
 
 5: Restart Couchdb
-sudo service couchdb restart
+- sudo service couchdb restart
 
 6: Tạo CSDL "tododb"
 
